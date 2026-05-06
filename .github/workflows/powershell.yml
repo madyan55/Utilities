@@ -1,0 +1,36 @@
+name: PowerShell CI
+
+on:
+  push:
+    branches: [ "master" ]
+  pull_request:
+    branches: [ "master" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest   # تشغيل على ويندوز
+
+    steps:
+      # 1. Checkout repository
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # 2. تشغيل سكربت PowerShell بسيط
+      - name: Run PowerShell script
+        run: |
+          Write-Output "🚀 بدء عملية البناء"
+          Get-Date
+        shell: pwsh
+
+      # 3. تشغيل سكربت من ملف داخل المشروع
+      - name: Execute project script
+        run: ./scripts/setup.ps1
+        shell: pwsh
+
+      # 4. رفع Artifact (مثلاً ملف Log أو Output)
+      - name: Upload logs
+        uses: actions/upload-artifact@v4
+        with:
+          name: logs
+          path: ./logs/*.txt
